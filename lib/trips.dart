@@ -7,7 +7,6 @@ import 'package:prestige_coach/trips.dart';
 import 'package:prestige_coach/profile.dart';
 
 
-
 class Trips extends StatefulWidget {
   const Trips({super.key});
 

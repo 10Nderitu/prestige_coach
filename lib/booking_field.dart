@@ -39,9 +39,9 @@ class _BookingFieldState extends State<BookingField> {
   int myCurrentIndex = 0;
 
   List pages = [
-    LoginScreen(),
-    const Trips(),
-    const ChooseBus(),
+    BookingField(),
+    ChooseBus(),
+    Profile(),
   ];
 
   @override
@@ -131,24 +131,9 @@ class _BookingFieldState extends State<BookingField> {
                   _selectDate();
                 },
               ),
-              pages[myCurrentIndex],
+              // pages[myCurrentIndex],
             ],
           ),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Colors.blue.shade200,
-          currentIndex: myIndex,
-          onTap: (index) {
-            setState(() {
-              myCurrentIndex = index;
-            });
-          },
-
-          items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.home_filled), label: 'Home'),
-            BottomNavigationBarItem(icon: Icon(Icons.menu_outlined), label: 'Trips'),
-            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-          ],
         ),
 
         floatingActionButton: FloatingActionButton(
