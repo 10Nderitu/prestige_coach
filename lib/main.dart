@@ -7,7 +7,7 @@ import 'package:prestige_coach/login_screen.dart';
 import 'package:prestige_coach/seat_selection.dart';
 import 'package:prestige_coach/signup_screen.dart';
 
-void main() async {
+Future <void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Supabase.initialize(
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Prestige Coach',
-      home: LoginScreen(),
+      home: SeatSelection(),
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,

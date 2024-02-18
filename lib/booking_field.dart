@@ -14,6 +14,7 @@ class BookingField extends StatefulWidget {
 }
 
 class _BookingFieldState extends State<BookingField> {
+
   List<DropdownMenuItem<String>> get location {
     return [
       const DropdownMenuItem(
@@ -65,6 +66,7 @@ class _BookingFieldState extends State<BookingField> {
                 'FROM',
                 style: TextStyle(
                   fontSize: 25,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               DropdownButtonFormField(
@@ -89,6 +91,7 @@ class _BookingFieldState extends State<BookingField> {
                 'TO',
                 style: TextStyle(
                   fontSize: 25,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               DropdownButtonFormField(
@@ -113,6 +116,7 @@ class _BookingFieldState extends State<BookingField> {
                 'DATE',
                 style: TextStyle(
                   fontSize: 25,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               TextField(

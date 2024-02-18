@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:prestige_coach/booking_field.dart';
 import 'package:prestige_coach/choose_bus.dart';
 import 'package:prestige_coach/profile.dart';
+import 'package:prestige_coach/seat_selection.dart';
 import 'package:prestige_coach/trips.dart';
 
 class CommonScaffold extends StatefulWidget {
