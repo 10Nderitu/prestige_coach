@@ -13,16 +13,15 @@ class Payment extends StatefulWidget {
   State<Payment> createState() => _PaymentState();
 }
 
-
 Future<void> lipaNaMpesa() async {
   dynamic transactionInitialisation;
-//Wrap it with a try-catch
+
   try {
-//Run it
+
     transactionInitialisation =
     await MpesaFlutterPlugin.initializeMpesaSTKPush(
-        businessShortCode: "174379",//use your store number if the transaction type is CustomerBuyGoodsOnline
-        transactionType: TransactionType.CustomerPayBillOnline, //or CustomerBuyGoodsOnline for till numbers
+        businessShortCode: "174379",  //store number
+        transactionType: TransactionType.CustomerPayBillOnline,
         amount: 10,
         partyA: "254710522753",
         partyB: "174379",
@@ -39,16 +38,6 @@ Future<void> lipaNaMpesa() async {
     return transactionInitialisation;
 
   } catch (e) {
-//you can implement your exception handling here.
-//Network un-reachability is a sure exception.
-
-    /*
-  Other 'throws':
-  1. Amount being less than 1.0
-  2. Consumer Secret/Key not set
-  3. Phone number is less than 9 characters
-  4. Phone number not in international format(should start with 254 for KE)
-   */
 
     print("CAUGHT EXCEPTION: " + e.toString());
   }
@@ -59,12 +48,23 @@ class _PaymentState extends State<Payment> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
+      appBar: AppBar(
+        backgroundColor: Colors.blue.shade300,
+        title: const Text('PROCEED TO PAY'),
+        centerTitle: true,
       ),
-      floatingActionButton: FloatingActionButton(
-          onPressed: (){
-            lipaNaMpesa();
-          },
+      body: Column(
+        children: [
+          const Image(
+              height: 300, width: 400, image: AssetImage("images/van.png")),
+          MaterialButton(
+              onPressed: () {
+                lipaNaMpesa();
+              },
+            color: Colors.green,
+            child: const Text('LIPA NA MPESA'),
+          )
+        ],
       ),
     );
   }
