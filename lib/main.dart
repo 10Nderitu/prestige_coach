@@ -22,8 +22,6 @@ Future <void> main() async {
   MpesaFlutterPlugin.setConsumerKey(mConsumerKey);
   MpesaFlutterPlugin.setConsumerSecret(mConsumerSecret);
 
-
-
   WidgetsFlutterBinding.ensureInitialized();
 
   await Supabase.initialize(
@@ -33,44 +31,6 @@ Future <void> main() async {
   runApp(const MyApp());
 }
 final supabase = Supabase.instance.client;
-
-  Future<dynamic> startTransaction({required double amount, required String phone}) async {
-    dynamic transactionInitialisation;
-//Wrap it with a try-catch
-    try {
-//Run it
-      transactionInitialisation =
-          await MpesaFlutterPlugin.initializeMpesaSTKPush(
-          businessShortCode: '174379',//use your store number if the transaction type is CustomerBuyGoodsOnline
-          transactionType: TransactionType.CustomerPayBillOnline, //or CustomerBuyGoodsOnline for till numbers
-          amount: 10,
-          partyA: "254710522753",
-          partyB: '174379',
-          callBackURL: Uri(),
-          accountReference: 'Payment',
-          phoneNumber: phone,
-          baseUri: Uri(scheme: "https", host: "sandbox.safaricom.co.ke"),
-          transactionDesc: 'Fare',
-          passKey: 'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919');
-
-      print("TRANSACTION RESULT: " + transactionInitialisation.toString());
-      return transactionInitialisation;
-
-    } catch (e) {
-//you can implement your exception handling here.
-//Network un-reachability is a sure exception.
-
-      /*
-  Other 'throws':
-  1. Amount being less than 1.0
-  2. Consumer Secret/Key not set
-  3. Phone number is less than 9 characters
-  4. Phone number not in international format(should start with 254 for KE)
-   */
-      print("CAUGHT EXCEPTION: " + e.toString());
-
-    }
-  }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

@@ -1,9 +1,6 @@
-import 'dart:collection';
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'main.dart';
 import 'package:mpesa_flutter_plugin/mpesa_flutter_plugin.dart';
-import 'keys.dart';
 
 
 class Payment extends StatefulWidget {
