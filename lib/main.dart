@@ -1,16 +1,9 @@
 import 'dart:collection';
 
-import 'package:book_my_seat/book_my_seat.dart';
 import 'package:flutter/material.dart';
-import 'package:prestige_coach/choose_bus.dart';
-import 'package:prestige_coach/payment.dart';
-import 'package:prestige_coach/repository/repository.dart';
 import 'seat_selection.dart';
-import 'package:prestige_coach/booking_field.dart';
-import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:mpesa_flutter_plugin/mpesa_flutter_plugin.dart';
-import 'package:prestige_coach/booking_field.dart';
 
 import 'keys.dart';
 
@@ -40,7 +33,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
           useMaterial3: true,
         ),
-        home: BusLayout(),
+        home: SeatGrid(),
       );
   }
 }

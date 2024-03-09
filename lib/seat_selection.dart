@@ -1,174 +1,111 @@
-import 'package:book_my_seat/book_my_seat.dart';
 import 'package:flutter/material.dart';
 
-class BusLayout extends StatefulWidget {
-  const BusLayout({Key? key}) : super(key: key);
-
+class SeatGrid extends StatefulWidget {
   @override
-  State<BusLayout> createState() => _BusLayoutState();
+  _SeatGridState createState() => _SeatGridState();
 }
 
-class _BusLayoutState extends State<BusLayout> {
-  Set<SeatNumber> selectedSeats = {};
+class _SeatGridState extends State<SeatGrid> {
+  List<bool> selectedSeats = List.generate(16, (index) => false);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
+      appBar: AppBar(
+        backgroundColor: Colors.blue.shade300,
+        title: const Text('SELECT SEAT'),
+        centerTitle: true,
+      ),
+      body: Container(
+        color: Colors.white,
+        padding: const EdgeInsets.all(16.0),
         child: Column(
-          mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const SizedBox(
-              height: 16,
+            Expanded(
+              child: GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 4,
+                  mainAxisSpacing: 8.0,
+                  crossAxisSpacing: 8.0,
+                ),
+                itemCount: 16,
+                itemBuilder: (BuildContext context, int index) {
+                  int row = index ~/ 4;
+                  int col = index % 4;
+                  bool isExcluded = (row == 0 && col == 2) || (row == 2 && col == 1);
+                  bool isBlack = row == 0 && col == 3;
+
+                  return GestureDetector(
+                    onTap: () {
+                      if (!isExcluded && !isBlack) {
+                        setState(() {
+                          selectedSeats[index] = !selectedSeats[index];
+                        });
+                      }
+                    },
+                    child: Container(
+                      color: isBlack
+                          ? Colors.black
+                          : isExcluded
+                          ? Colors.transparent
+                          : selectedSeats[index]
+                          ? Colors.green
+                          : Colors.blue,
+                      margin: const EdgeInsets.all(8.0),
+                    ),
+                  );
+                },
+              ),
             ),
-            const Text("Select your seat"),
-            const SizedBox(
-              height: 32,
-            ),
-            Flexible(
-              child: SizedBox(
-                width: double.maxFinite,
-                height: 500,
-                child: SeatLayoutWidget(
-                  onSeatStateChanged: (rowI, colI, seatState) {
-                    if (seatState == SeatState.selected) {
-                      selectedSeats.add(SeatNumber(rowI: rowI, colI: colI));
-                    } else {
-                      selectedSeats.remove(SeatNumber(rowI: rowI, colI: colI));
-                    }
-                  },
-                  stateModel: const SeatLayoutStateModel(
-                    rows: 4,
-                    cols: 4,
-                    seatSvgSize: 100,
-                    pathSelectedSeat: 'images/selected.svg',
-                    pathDisabledSeat: 'images/disabled.svg',
-                    pathSoldSeat: 'images/sold.svg',
-                    pathUnSelectedSeat: 'images/available.svg',
-                    currentSeatsState: [
-                      [
-                        SeatState.unselected,
-                        SeatState.unselected,
-                        SeatState.empty,
-                        SeatState.disabled,
-                      ],
-                      [
-                        SeatState.unselected,
-                        SeatState.unselected,
-                        SeatState.unselected,
-                        SeatState.unselected,
-                      ],
-                      [
-                        SeatState.unselected,
-                        SeatState.empty,
-                        SeatState.unselected,
-                        SeatState.unselected,
-                      ],
-                      [
-                        SeatState.unselected,
-                        SeatState.unselected,
-                        SeatState.unselected,
-                        SeatState.unselected,
-                      ],
-                    ],
+            Padding(
+              padding: const EdgeInsets.only(bottom: 16.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  showSelectedSeatsDialog();
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                ),
+                child: const Text(
+                  'Show Selected Seats',
+                  style: TextStyle(
+                    color: Colors.white,
                   ),
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        width: 15,
-                        height: 15,
-                        color: Colors.black,
-                      ),
-                      const SizedBox(width: 2),
-                      const Text('Disabled')
-                    ],
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        width: 15,
-                        height: 15,
-                        color: Colors.red,
-                      ),
-                      const SizedBox(width: 2),
-                      const Text('Sold')
-                    ],
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        width: 15,
-                        height: 15,
-                        color: Colors.blue,
-                      ),
-                      const SizedBox(width: 2),
-                      const Text('Available')
-                    ],
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        width: 15,
-                        height: 15,
-                        color: Colors.green,
-                      ),
-                      const SizedBox(width: 2),
-                      const Text('Selected by you')
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 12,
-            ),
-            ElevatedButton(
-              onPressed: () {
-                setState(() {});
-              },
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.resolveWith((states) => const Color(0xFFfc4c4e)),
-              ),
-              child: const Text('Show my selected seat numbers'),
-            ),
-            const SizedBox(height: 12),
-            Text(selectedSeats.join(" , "))
           ],
         ),
       ),
     );
   }
+
+  void showSelectedSeatsDialog() {
+    List<int> selectedSeatNumbers = [];
+
+    for (int i = 0; i < selectedSeats.length; i++) {
+      if (selectedSeats[i]) {
+        selectedSeatNumbers.add(i + 1);
+      }
+    }
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Selected Seats'),
+          content: Text(selectedSeatNumbers.isNotEmpty ? selectedSeatNumbers.join(', ') : 'No seats selected'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
 
-class SeatNumber {
-  final int rowI;
-  final int colI;
-
-  const SeatNumber({required this.rowI, required this.colI});
-
-  @override
-  bool operator ==(Object other) {
-    return rowI == (other as SeatNumber).rowI && colI == other.colI;
-  }
-
-  @override
-  int get hashCode => rowI.hashCode;
-
-  @override
-  String toString() {
-    return '[$rowI][$colI]';
-  }
-}
