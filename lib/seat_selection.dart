@@ -1,160 +1,151 @@
-import 'package:flutter/material.dart';
-import 'package:prestige_coach/common_scaffold.dart';
 import 'package:book_my_seat/book_my_seat.dart';
+import 'package:flutter/material.dart';
 
-class SeatSelection extends StatefulWidget {
-  const SeatSelection({super.key});
+class BusLayout extends StatefulWidget {
+  const BusLayout({Key? key}) : super(key: key);
 
   @override
-  State<SeatSelection> createState() => _SeatSelectionState();
+  State<BusLayout> createState() => _BusLayoutState();
 }
 
-class _SeatSelectionState extends State<SeatSelection> {
+class _BusLayoutState extends State<BusLayout> {
   Set<SeatNumber> selectedSeats = {};
-
-  void _showSelectedSeatNumbers() {
-    if (selectedSeats.isNotEmpty) {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: const Text('Selected Seat Numbers'),
-            content: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text('You have selected the following seats:'),
-                const SizedBox(height: 10),
-                for (SeatNumber seatNumber in selectedSeats)
-                  Text(seatNumber.toString()),
-              ],
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
-    } else {
-      // If no seats are selected, show a snack-bar with a message.
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('No seats selected.'),
-        ),
-      );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue.shade200,
-        title: const Text('CHOOSE YOUR SEAT'),
-        centerTitle: true,
-      ),
-      body: SingleChildScrollView(
+      body: SafeArea(
         child: Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 50, horizontal: 100),
-              child: SeatLayoutWidget(
-                onSeatStateChanged: (rowI, colI, seatState) {
-                  if (seatState == SeatState.selected) {
-                    selectedSeats.add(SeatNumber(rowI: rowI, colI: colI));
-                  } else {
-                    selectedSeats.remove(SeatNumber(rowI: rowI, colI: colI));
-                  }
-                },
-                stateModel: const SeatLayoutStateModel(
-                  rows: 4,
-                  cols: 4,
-                  seatSvgSize: 50,
-                  pathSelectedSeat: 'images/selected.svg',
-                  pathDisabledSeat: 'images/disabled.svg',
-                  pathSoldSeat: 'images/sold.svg',
-                  pathUnSelectedSeat: 'images/available.svg',
-                  currentSeatsState: [
-                    [
-                      SeatState.unselected,
-                      SeatState.unselected,
-                      SeatState.empty,
-                      SeatState.disabled,
+            const SizedBox(
+              height: 16,
+            ),
+            const Text("Select your seat"),
+            const SizedBox(
+              height: 32,
+            ),
+            Flexible(
+              child: SizedBox(
+                width: double.maxFinite,
+                height: 500,
+                child: SeatLayoutWidget(
+                  onSeatStateChanged: (rowI, colI, seatState) {
+                    if (seatState == SeatState.selected) {
+                      selectedSeats.add(SeatNumber(rowI: rowI, colI: colI));
+                    } else {
+                      selectedSeats.remove(SeatNumber(rowI: rowI, colI: colI));
+                    }
+                  },
+                  stateModel: const SeatLayoutStateModel(
+                    rows: 4,
+                    cols: 4,
+                    seatSvgSize: 100,
+                    pathSelectedSeat: 'images/selected.svg',
+                    pathDisabledSeat: 'images/disabled.svg',
+                    pathSoldSeat: 'images/sold.svg',
+                    pathUnSelectedSeat: 'images/available.svg',
+                    currentSeatsState: [
+                      [
+                        SeatState.unselected,
+                        SeatState.unselected,
+                        SeatState.empty,
+                        SeatState.disabled,
+                      ],
+                      [
+                        SeatState.unselected,
+                        SeatState.unselected,
+                        SeatState.unselected,
+                        SeatState.unselected,
+                      ],
+                      [
+                        SeatState.unselected,
+                        SeatState.empty,
+                        SeatState.unselected,
+                        SeatState.unselected,
+                      ],
+                      [
+                        SeatState.unselected,
+                        SeatState.unselected,
+                        SeatState.unselected,
+                        SeatState.unselected,
+                      ],
                     ],
-                    [
-                      SeatState.unselected,
-                      SeatState.unselected,
-                      SeatState.unselected,
-                      SeatState.unselected,
-                    ],
-                    [
-                      SeatState.unselected,
-                      SeatState.empty,
-                      SeatState.unselected,
-                      SeatState.unselected,
-                    ],
-                    [
-                      SeatState.unselected,
-                      SeatState.unselected,
-                      SeatState.unselected,
-                      SeatState.unselected,
-                    ],
-                  ],
+                  ),
                 ),
               ),
             ),
-            const SizedBox(height: 20),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40),
+              padding: const EdgeInsets.all(16.0),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    width: 15,
-                    height: 15,
-                    color: Colors.green,
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        width: 15,
+                        height: 15,
+                        color: Colors.black,
+                      ),
+                      const SizedBox(width: 2),
+                      const Text('Disabled')
+                    ],
                   ),
-                  const SizedBox(width: 2),
-                  const Text('Selected'),
-                  const SizedBox(width: 10),
-                  Container(
-                    width: 15,
-                    height: 15,
-                    color: Colors.blue.shade200,
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        width: 15,
+                        height: 15,
+                        color: Colors.red,
+                      ),
+                      const SizedBox(width: 2),
+                      const Text('Sold')
+                    ],
                   ),
-                  const SizedBox(width: 2),
-                  const Text('Available'),
-                  const SizedBox(width: 10),
-                  Container(
-                    width: 15,
-                    height: 15,
-                    color: Colors.red,
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        width: 15,
+                        height: 15,
+                        color: Colors.blue,
+                      ),
+                      const SizedBox(width: 2),
+                      const Text('Available')
+                    ],
                   ),
-                  const SizedBox(width: 2),
-                  const Text('Sold'),
-                  const SizedBox(width: 10),
-                  Container(
-                    width: 15,
-                    height: 15,
-                    color: Colors.black,
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        width: 15,
+                        height: 15,
+                        color: Colors.green,
+                      ),
+                      const SizedBox(width: 2),
+                      const Text('Selected by you')
+                    ],
                   ),
-                  const SizedBox(width: 2),
-                  const Text('Disabled'),
-                  const SizedBox(width: 10),
                 ],
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(
+              height: 12,
+            ),
             ElevatedButton(
               onPressed: () {
-                _showSelectedSeatNumbers();
+                setState(() {});
               },
-              child: const Text('Show selected seat numbers'),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.resolveWith((states) => const Color(0xFFfc4c4e)),
+              ),
+              child: const Text('Show my selected seat numbers'),
             ),
+            const SizedBox(height: 12),
+            Text(selectedSeats.join(" , "))
           ],
         ),
       ),

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:prestige_coach/booking_field.dart';
 import 'package:prestige_coach/signup_screen.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+import 'main.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});

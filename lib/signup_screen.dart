@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:prestige_coach/login_screen.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SignupScreen extends StatelessWidget {
+
+  final supabase = Supabase.instance.client;
 
   SignupScreen({super.key});
   final fNameController = TextEditingController();
   final lNameController = TextEditingController();
   final emailController = TextEditingController();
-  final telController = TextEditingController();
   final passwordController = TextEditingController();
   @override
 
@@ -72,18 +74,6 @@ class SignupScreen extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextField(
-                    controller: telController,
-                    decoration: InputDecoration(
-                      hintText: "Phone",
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(20), borderSide: BorderSide.none),
-                      filled: true,
-                      fillColor: Colors.blue.shade200,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
                     obscureText: true,
                     obscuringCharacter: '*',
                     controller: passwordController,
@@ -100,12 +90,7 @@ class SignupScreen extends StatelessWidget {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => LoginScreen(),
-                      ),
-                    );
+                    supabase.auth.signUp(password: passwordController.text, email: emailController.text);
                   },
                   child: const Text("Sign Up"),
                 ),

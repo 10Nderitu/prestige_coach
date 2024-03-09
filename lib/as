@@ -40,3 +40,10 @@ bottomNavigationBar: BottomNavigationBar(
                       BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
                     ],
                   ),
+
+    //ROUTES
+    initialRoute: '/',
+            routes: <String, WidgetBuilder>{
+              '/': (_) =>  SignupScreen(),
+              '/login': (_) => LoginScreen(),
+            },

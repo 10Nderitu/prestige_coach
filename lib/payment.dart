@@ -19,7 +19,7 @@ Future<void> lipaNaMpesa() async {
     await MpesaFlutterPlugin.initializeMpesaSTKPush(
         businessShortCode: "174379",  //store number
         transactionType: TransactionType.CustomerPayBillOnline,
-        amount: 10,
+        amount: 1,
         partyA: "254710522753",
         partyB: "174379",
         callBackURL: Uri(scheme: "https",
@@ -59,6 +59,7 @@ class _PaymentState extends State<Payment> {
                 lipaNaMpesa();
               },
             color: Colors.green,
+            height: 50,
             child: const Text('LIPA NA MPESA'),
           )
         ],
