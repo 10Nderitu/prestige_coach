@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mpesa_flutter_plugin/mpesa_flutter_plugin.dart';
+import 'package:prestige_coach/root.dart';
 
 
 class Payment extends StatefulWidget {
@@ -47,21 +48,49 @@ class _PaymentState extends State<Payment> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue.shade300,
-        title: const Text('PROCEED TO PAY'),
+        title: const Text(style: TextStyle(fontWeight: FontWeight.bold),'PAYMENT'),
         centerTitle: true,
       ),
       body: Column(
         children: [
           const Image(
               height: 300, width: 400, image: AssetImage("images/van.png")),
-          MaterialButton(
-              onPressed: () {
-                lipaNaMpesa();
-              },
-            color: Colors.green,
-            height: 50,
-            child: const Text('LIPA NA MPESA'),
-          )
+        MaterialButton(
+          onPressed: () async {
+            try {
+              await lipaNaMpesa();
+              // After successful payment, show a Thank You dialog
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text('Awaiting Payment'),
+                    content: const Text(style: TextStyle(fontSize: 20), 'Thank You'),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context); // Close the dialog
+                          // After payment and Thank You dialog, navigate to BookingField
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(builder: (context) => const Root()),
+                                  (Route<dynamic> route) => false
+                          );
+                        },
+                        child: const Text('OK'),
+                      ),
+                    ],
+                  );
+                },
+              );
+            } catch (error) {
+              // Handle any errors that occurred during payment
+            }
+          },
+          color: Colors.green,
+          height: 50,
+          child: const Text('LIPA NA MPESA'),
+        ),
         ],
       ),
     );

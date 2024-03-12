@@ -1,13 +1,17 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
-import 'seat_selection.dart';
+import 'package:prestige_coach/payment.dart';
+import 'package:prestige_coach/signup_screen.dart';
+import 'package:prestige_coach/splash_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:mpesa_flutter_plugin/mpesa_flutter_plugin.dart';
+import 'package:provider/provider.dart';
 
 import 'keys.dart';
 
 Future <void> main() async {
+
   MpesaFlutterPlugin.setConsumerKey(mConsumerKey);
   MpesaFlutterPlugin.setConsumerSecret(mConsumerSecret);
 
@@ -33,7 +37,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
           useMaterial3: true,
         ),
-        home: SeatGrid(),
+        home: SplashScreen(),
       );
   }
 }

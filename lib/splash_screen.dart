@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:prestige_coach/root.dart';
+import 'package:prestige_coach/signup_screen.dart';
 import 'main.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -21,9 +23,15 @@ class _SplashScreenState extends State<SplashScreen> {
 
     if (!mounted) return;
     if (session != null) {
-      Navigator.of(context).pushReplacementNamed('/login');
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => Root()));
     } else {
-      Navigator.of(context).pushReplacementNamed('/signup');
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SignupScreen(),
+        ),
+      );
     }
   }
 
