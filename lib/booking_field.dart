@@ -10,7 +10,6 @@ class BookingField extends StatefulWidget {
 }
 
 class _BookingFieldState extends State<BookingField> {
-
   List<DropdownMenuItem<String>> get fromLocation {
     return [
       const DropdownMenuItem(
@@ -37,18 +36,7 @@ class _BookingFieldState extends State<BookingField> {
     ];
   }
 
-  List<DropdownMenuItem<String>> get time {
-    return [
-      const DropdownMenuItem(
-        value: '8 AM',
-        child: Text('8 AM'),
-      ),
-      const DropdownMenuItem(
-        value: '10 PM',
-        child: Text('10 PM'),
-      ),
-    ];
-  }
+  List<DropdownMenuItem<String>> time = [];
 
   DateTime selectedDate = DateTime.now();
   final TextEditingController _dateController = TextEditingController();
@@ -56,6 +44,37 @@ class _BookingFieldState extends State<BookingField> {
   String startLocation = '';
   String endLocation = '';
   String selectedTime = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeTimeDropdown();
+  }
+
+  void _initializeTimeDropdown() {
+    time = [
+      const DropdownMenuItem(
+        value: '10 PM',
+        child: Text('10 PM'),
+      ),
+    ];
+    if (!isCurrentDate()) {
+      time.insert(
+        0,
+        const DropdownMenuItem(
+          value: '8 AM',
+          child: Text('8 AM'),
+        ),
+      );
+    }
+  }
+
+  bool isCurrentDate() {
+    final now = DateTime.now();
+    return selectedDate.year == now.year &&
+        selectedDate.month == now.month &&
+        selectedDate.day == now.day;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,11 +99,9 @@ class _BookingFieldState extends State<BookingField> {
               DropdownButtonFormField(
                 items: fromLocation,
                 onChanged: (value) {
-                  print(value);
-                  startLocation = value!;
-                  print(value);
-                  print(startLocation);
-                  //print(location);
+                  setState(() {
+                    startLocation = value!;
+                  });
                 },
                 decoration: InputDecoration(
                   prefixIcon: const Icon(Icons.location_city),
@@ -109,10 +126,9 @@ class _BookingFieldState extends State<BookingField> {
               DropdownButtonFormField(
                 items: toLocation,
                 onChanged: (value) {
-                  print(value);
-                  endLocation = value!;
-                  print(value);
-                  print(endLocation);
+                  setState(() {
+                    endLocation = value!;
+                  });
                 },
                 decoration: InputDecoration(
                   prefixIcon: const Icon(Icons.location_city),
@@ -161,9 +177,9 @@ class _BookingFieldState extends State<BookingField> {
               DropdownButtonFormField(
                 items: time,
                 onChanged: (value) {
-                  print(value);
-                  selectedTime = value!;
-                  print(time);
+                  setState(() {
+                    selectedTime = value!;
+                  });
                 },
                 decoration: InputDecoration(
                   prefixIcon: const Icon(Icons.timelapse),
@@ -176,18 +192,26 @@ class _BookingFieldState extends State<BookingField> {
                 ),
               ),
               const SizedBox(height: 10),
-
               ElevatedButton(
                 onPressed: () async {
-                  if (startLocation.isNotEmpty && endLocation.isNotEmpty && selectedTime.isNotEmpty && _dateController.text.isNotEmpty) {
+                  if (startLocation.isNotEmpty &&
+                      endLocation.isNotEmpty &&
+                      selectedTime.isNotEmpty &&
+                      _dateController.text.isNotEmpty) {
                     if (startLocation == endLocation) {
                       // Show AlertDialog if from location is the same as to location
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                            title: const Text(style: TextStyle(fontWeight: FontWeight.bold), 'Error'),
-                            content: const Text( style: TextStyle(fontSize: 20) ,"'From Location' cannot be the same as the 'To Location'"),
+                            title: const Text(
+                              'Error',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            content: const Text(
+                              "'From Location' cannot be the same as the 'To Location'",
+                              style: TextStyle(fontSize: 20),
+                            ),
                             actions: [
                               TextButton(
                                 onPressed: () {
@@ -200,21 +224,22 @@ class _BookingFieldState extends State<BookingField> {
                         },
                       );
                     } else {
-
-                      SharedPreferences prefs = await SharedPreferences.getInstance();
+                      SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
                       prefs.setString('startLocation', startLocation);
                       prefs.setString('endLocation', endLocation);
                       prefs.setString('selectedTime', selectedTime);
                       prefs.setString('date', _dateController.text);
 
                       // Navigate to ChooseBus screen if all fields are filled and locations are different
-                      Navigator.push(context, MaterialPageRoute(builder: (context) {
-                        return ChooseBus(
-                          start_location: startLocation,
-                          end_location: endLocation,
-                          time: selectedTime,
-                        );
-                      }));
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                            return ChooseBus(
+                              start_location: startLocation,
+                              end_location: endLocation,
+                              time: selectedTime,
+                            );
+                          }));
                     }
                   } else {
                     // Show Snack bar if any field is empty
@@ -225,9 +250,8 @@ class _BookingFieldState extends State<BookingField> {
                     );
                   }
                 },
-                child: const Text(style: TextStyle(fontWeight: FontWeight.bold), 'Next'),
+                child: const Text('Next', style: TextStyle(fontWeight: FontWeight.bold)),
               )
-
             ],
           ),
         ),
@@ -244,7 +268,9 @@ class _BookingFieldState extends State<BookingField> {
     );
     if (_picked != null) {
       setState(() {
+        selectedDate = _picked;
         _dateController.text = _picked.toString().split(" ")[0];
+        _initializeTimeDropdown(); // Update time dropdown based on selected date
       });
     }
   }

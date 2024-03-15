@@ -1,8 +1,7 @@
 import 'package:prestige_coach/main.dart';
 
 class Repository {
-  Future<List<Map<String, dynamic>>> getAvailableBuses(
-      String source, String destination, String time) async {
+  Future<List<Map<String, dynamic>>> getAvailableBuses(String source, String destination, String time) async {
     List<Map<String, dynamic>> filteredBuses = [];
     final res = await supabase
         .from('buses')
@@ -17,10 +16,31 @@ class Repository {
 
       // Filter out entries where 'routes' is null
       filteredBuses = buses.where((bus) => bus['routes'] != null).toList();
-
       print('abc $filteredBuses');
       return filteredBuses;
     }
     return filteredBuses;
   }
+
+  Future <void> bookBus(int bus_id, int route_id, List selectedSeatNumber) async {
+    await supabase.from('booking').insert({
+      'bus_id': bus_id,
+      'route_id': route_id,
+      'seat_number':selectedSeatNumber,
+    });
+  }
+  Future<List>getUnavailableSeats(int bus_id, int route_id) async {
+    final res = await supabase
+        .from('booking')
+        .select('seat_number')
+        .eq('bus_id', bus_id)
+        .eq('route_id', route_id);
+    if (res[0]['seat_number'] != null) {
+    final unavailableSeats = res.where((seatNumber) => seatNumber['seat_number'] != null).toList();
+    print(unavailableSeats);
+    return unavailableSeats;
+  }
+    return [];
+}
+
 }

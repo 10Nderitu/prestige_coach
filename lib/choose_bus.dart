@@ -19,6 +19,10 @@ class ChooseBus extends StatefulWidget {
 }
 
 class _ChooseBusState extends State<ChooseBus> {
+
+  int bus_id = 0;
+  int route_id = 0;
+
   @override
   Widget build(BuildContext context) {
     final supabase = Supabase.instance.client;
@@ -59,16 +63,15 @@ class _ChooseBusState extends State<ChooseBus> {
                         color: Colors.black, // Set text color
                       ),
                     ),
-                    onTap: () {
+                    onTap: () async {
                       Navigator.push(context, MaterialPageRoute(builder: (context) {
-                        return SeatGrid();
+                        return SeatGrid(bus_id: data[index]['bus_id'], route_id: data[index]['routes']['route_id']);
                       }));
                     },
                   ),
                 );
               },
             );
-
           }
         },
       ),
