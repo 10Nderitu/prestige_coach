@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prestige_coach/booking_field.dart';
 import 'package:prestige_coach/login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -130,22 +131,23 @@ class SignupScreen extends StatelessWidget {
                           'phone': int.parse(numberController.text),
                         },
                       );
-
                       // Successful sign-up
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
+                        const SnackBar(
                           content: Text('Sign up successful!'),
                           duration: Duration(seconds: 2),
                         ),
                       );
-
-                      // Navigate to the bookingfield page
-                      Navigator.pushReplacementNamed(context,
-                          '/bookingfield'); // Replace with your route name
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const BookingField(),
+                        ),
+                      );
                     } catch (error) {
                       // Failed sign-up
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
+                        const SnackBar(
                           content: Text('Sign up failed. Please try again.'),
                           duration: Duration(seconds: 2),
                         ),
