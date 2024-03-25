@@ -235,6 +235,7 @@ class _BookingFieldState extends State<BookingField> {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
                             return ChooseBus(
+                              date: _dateController.text,
                               start_location: startLocation,
                               end_location: endLocation,
                               time: selectedTime,

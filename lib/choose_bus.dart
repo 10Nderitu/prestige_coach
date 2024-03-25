@@ -8,11 +8,13 @@ class ChooseBus extends StatefulWidget {
       {super.key,
       required this.start_location,
       required this.end_location,
-      required this.time});
+      required this.time,
+      required this.date});
 
   final String start_location;
   final String end_location;
   final String time;
+  final String date;
 
   @override
   State<ChooseBus> createState() => _ChooseBusState();

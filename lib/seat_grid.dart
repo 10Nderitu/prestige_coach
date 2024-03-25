@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:prestige_coach/main.dart';
 import 'package:prestige_coach/payment.dart';
 import 'package:prestige_coach/repository/repository.dart';
 
 class SeatGrid extends StatefulWidget {
-
   final int bus_id;
   final int route_id;
 
@@ -14,7 +14,6 @@ class SeatGrid extends StatefulWidget {
 }
 
 class _SeatGridState extends State<SeatGrid> {
-
   late BuildContext scaffoldContext;
   List<bool> selectedSeats = List.generate(16, (index) => false);
 
@@ -28,7 +27,6 @@ class _SeatGridState extends State<SeatGrid> {
     // Store the context of the Scaffold
     scaffoldContext = context;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +50,7 @@ class _SeatGridState extends State<SeatGrid> {
                 builder: (context, snapshot) {
                   return GridView.builder(
                     gridDelegate:
-                    const SliverGridDelegateWithFixedCrossAxisCount(
+                        const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 4,
                       mainAxisSpacing: 8,
                       crossAxisSpacing: 8,
@@ -65,20 +63,21 @@ class _SeatGridState extends State<SeatGrid> {
                           (row == 0 && col == 2) || (row == 2 && col == 1);
                       bool isBlack = row == 0 && col == 3;
 
-                      bool isUnavailable = snapshot.data != null && snapshot.data!.any((seat) {
-                        if (seat['seat_number'] is List) {
-                          for (var seatIndex in seat['seat_number']) {
-                            int index = int.parse(seatIndex) - 1;
-                            int seatRow = index ~/ 4;
-                            int seatCol = index % 4;
-                            if (seatRow == row && seatCol == col) {
-                              return true;
+                      bool isUnavailable = snapshot.data != null &&
+                          snapshot.data!.any((seat) {
+                            if (seat['seat_number'] is List) {
+                              for (var seatIndex in seat['seat_number']) {
+                                int index = int.parse(seatIndex) - 1;
+                                int seatRow = index ~/ 4;
+                                int seatCol = index % 4;
+                                if (seatRow == row && seatCol == col) {
+                                  return true;
+                                }
+                              }
+                              return false; // None of the seat numbers matched
                             }
-                          }
-                          return false; // None of the seat numbers matched
-                        }
-                        return false; // Handle other cases if needed
-                      });
+                            return false; // Handle other cases if needed
+                          });
 
                       return GestureDetector(
                         onTap: () {
@@ -92,23 +91,22 @@ class _SeatGridState extends State<SeatGrid> {
                           color: isBlack
                               ? Colors.black
                               : isUnavailable
-                              ? Colors.red
-                              : isExcluded
-                              ? Colors.transparent
-                              : selectedSeats[index]
-                              ? Colors.green
-                              : Colors.blue,
+                                  ? Colors.red
+                                  : isExcluded
+                                      ? Colors.transparent
+                                      : selectedSeats[index]
+                                          ? Colors.green
+                                          : Colors.blue,
                           margin: const EdgeInsets.all(8),
                         ),
                       );
                     },
                   );
                 },
-                future: Repository().getUnavailableSeats(
-                    widget.bus_id, widget.route_id),
+                future: Repository()
+                    .getUnavailableSeats(widget.bus_id, widget.route_id),
               ),
             ),
-
             Padding(
               padding: const EdgeInsets.only(bottom: 16),
               child: ElevatedButton(
@@ -130,9 +128,7 @@ class _SeatGridState extends State<SeatGrid> {
                 child: const Text(
                   'Book Now',
                   style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold
-                  ),
+                      color: Colors.white, fontWeight: FontWeight.bold),
                 ),
               ),
             ),
@@ -141,7 +137,6 @@ class _SeatGridState extends State<SeatGrid> {
       ),
     );
   }
-
 
   void showSelectedSeatsDialog(BuildContext context, int route_id, int bus_id) {
     selectedSeatNumbers.clear();
@@ -160,15 +155,17 @@ class _SeatGridState extends State<SeatGrid> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(selectedSeatNumbers.isNotEmpty
-                  ? 'Selected seat number(s): ${selectedSeatNumbers.join(', ')}'
-                  : 'No seats selected', style: const TextStyle(
-                  fontSize: 20, fontWeight: FontWeight.bold)),
+              Text(
+                  selectedSeatNumbers.isNotEmpty
+                      ? 'Selected seat number(s): ${selectedSeatNumbers.join(', ')}'
+                      : 'No seats selected',
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold)),
               const SizedBox(height: 20),
               Text(
                 'Total Fare: Ksh $totalFare',
-                style: const TextStyle(
-                    fontSize: 20, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               )
             ],
           ),
@@ -184,13 +181,13 @@ class _SeatGridState extends State<SeatGrid> {
                     ),
                   );
                 } else {
-                  await Repository().bookBus(
-                      bus_id, route_id, selectedSeatNumbers);
+                  var customer_id = supabase.auth.currentUser!.id;
+                  var today_date = DateTime.now().toIso8601String();
+                  await Repository().bookBus(bus_id, route_id,
+                      selectedSeatNumbers, customer_id, today_date);
 
-                  await Navigator.pushReplacement(
-                      scaffoldContext,
-                      MaterialPageRoute(
-                          builder: (context) => const Payment()));
+                  await Navigator.pushReplacement(scaffoldContext,
+                      MaterialPageRoute(builder: (context) => const Payment()));
                 }
               },
               child: const Text(

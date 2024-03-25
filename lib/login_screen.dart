@@ -25,7 +25,7 @@ class LoginScreen extends StatelessWidget {
               const Image(
                 width: 300, height: 300, image: AssetImage("images/van.png")),
               const Text(
-              'Welcome to Prestige Coach',
+              'Welcome to TransMobi',
               style: TextStyle(
                 fontSize: 25,
               ),

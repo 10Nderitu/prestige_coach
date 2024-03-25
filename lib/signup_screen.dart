@@ -37,7 +37,7 @@ class SignupScreen extends StatelessWidget {
                   ),
                 ),
                 const Text(
-                  'Welcome to Prestige Coach',
+                  'Welcome to TransMobi',
                   style: TextStyle(
                     fontSize: 25,
                   ),

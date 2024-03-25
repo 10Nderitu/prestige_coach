@@ -1,8 +1,6 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
-import 'package:prestige_coach/payment.dart';
-import 'package:prestige_coach/signup_screen.dart';
 import 'package:prestige_coach/splash_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:mpesa_flutter_plugin/mpesa_flutter_plugin.dart';
