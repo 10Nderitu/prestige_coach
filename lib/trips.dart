@@ -61,6 +61,10 @@ class _TripsState extends State<Trips> {
                             style: const TextStyle(fontSize: 14),
                           ),
                           Text(
+                            'Date: ${data[index]['date']}',
+                            style: const TextStyle(fontSize: 14),
+                          ),
+                          Text(
                             'Seat Number: ${data[index]['seat_number']}',
                             style: const TextStyle(fontSize: 14),
                           ),
